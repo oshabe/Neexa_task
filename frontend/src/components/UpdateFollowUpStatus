@@ -1,0 +1,44 @@
+// src/components/UpdateFollowUpStatus.js
+import React, { useState } from 'react';
+import UpdateFollowUpStatus from './UpdateFollowUpStatus';
+
+const UpdateFollowUpStatus = ({ followUpId }) => {
+  const [status, setStatus] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const statusData = { status };
+
+    fetch(`http://localhost:8000/api/followups/${followUpId}/status`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(statusData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response
+        console.log(data);
+      });
+  };
+
+  return (
+    <div>
+      <h2>Update Follow-Up Status</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Status:</label>
+          <select value={status} onChange={(e) => setStatus(e.target.value)} required>
+            <option value="Pending">Pending</option>
+            <option value="Completed">Completed</option>
+            <option value="Missed">Missed</option>
+          </select>
+        </div>
+        <button type="submit">Update Status</button>
+      </form>
+    </div>
+  );
+};
+
+export default UpdateFollowUpStatus;
